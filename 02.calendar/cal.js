@@ -1,8 +1,8 @@
 import minimist from "minimist";
 
-const thisDay = new Date();
-let requestedYear = thisDay.getFullYear();
-let requestedMonth = thisDay.getMonth() + 1;
+const today = new Date();
+let requestedYear = today.getFullYear();
+let requestedMonth = today.getMonth() + 1;
 const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
 
 const args = minimist(process.argv.slice(2));
