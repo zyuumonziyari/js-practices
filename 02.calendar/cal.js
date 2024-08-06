@@ -1,16 +1,16 @@
 import minimist from "minimist";
 
 const today = new Date();
-let requestedYear = today.getFullYear();
-let requestedMonth = today.getMonth() + 1;
+const thisYear = today.getFullYear();
+const thisMonth = today.getMonth() + 1;
 const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
 
 const args = minimist(process.argv.slice(2));
-if (args["y"]) requestedYear = parseInt(args["y"], 10);
-if (args["m"]) requestedMonth = parseInt(args["m"], 10);
+const year = args["y"]? parseInt(args["y"], 10) : thisYear;
+const month = args["m"]? parseInt(args["m"], 10) : thisMonth;
 
-const firstDay = new Date(requestedYear, requestedMonth - 1, 1);
-const lastDay = new Date(requestedYear, requestedMonth, 0);
+const firstDay = new Date(year, month - 1, 1);
+const lastDay = new Date(year, month, 0);
 
 function outputCalendar(year, month) {
   console.log(`      ${month}月 ${year}`);
@@ -27,4 +27,4 @@ function outputCalendar(year, month) {
   }
   process.stdout.write("\n");
 }
-outputCalendar(requestedYear, requestedMonth);
+outputCalendar(year, month);
