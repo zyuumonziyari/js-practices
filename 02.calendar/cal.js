@@ -5,10 +5,9 @@ const args = minimist(process.argv.slice(2));
 const year = args["y"]? parseInt(args["y"], 10) : today.getFullYear();
 const month = args["m"]? parseInt(args["m"], 10) : today.getMonth() + 1;
 
-const firstDay = new Date(year, month - 1, 1);
-const lastDay = new Date(year, month, 0);
-
 function outputCalendar(year, month) {
+  const firstDay = new Date(year, month - 1, 1);
+  const lastDay = new Date(year, month, 0);
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
 
