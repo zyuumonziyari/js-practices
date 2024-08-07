@@ -2,8 +2,8 @@ import minimist from "minimist";
 
 const today = new Date();
 const args = minimist(process.argv.slice(2));
-const year = args["y"]? parseInt(args["y"], 10) : today.getFullYear();
-const month = args["m"]? parseInt(args["m"], 10) : today.getMonth() + 1;
+const year = args.y? parseInt(args.y, 10) : today.getFullYear();
+const month = args.m? parseInt(args.m, 10) : today.getMonth() + 1;
 
 function outputCalendar(year, month) {
   const firstDay = new Date(year, month - 1, 1);
