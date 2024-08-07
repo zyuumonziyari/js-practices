@@ -1,18 +1,19 @@
 import minimist from "minimist";
 
 function outputCalendar(year, month) {
-  const firstDay = new Date(year, month - 1, 1);
-  const lastDay = new Date(year, month, 0);
+  const firstWeekDay = new Date(year, month - 1, 1).getDay();
+  const lastDate = new Date(year, month, 0).getDate();
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
 
-  const startingDay = firstDay.getDay();
-  process.stdout.write(" ".repeat(startingDay * 3));
+  process.stdout.write("   ".repeat(firstWeekDay));
 
-  for (let i = 1; i <= lastDay.getDate(); ++i) {
-    process.stdout.write(i.toString().padStart(2) + " ");
-    if ((startingDay + i) % 7 === 0) {
+  for (let i = 1; i <= lastDate; ++i) {
+    process.stdout.write(`${i.toString().padStart(2)}`);
+    if ((firstWeekDay + i) % 7 === 0  || i === lastDate) {
       process.stdout.write("\n");
+    } else {
+      process.stdout.write(" ");
     }
   }
   process.stdout.write("\n");
