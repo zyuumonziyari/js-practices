@@ -1,10 +1,5 @@
 import minimist from "minimist";
 
-const today = new Date();
-const args = minimist(process.argv.slice(2));
-const year = args.y? args.y : today.getFullYear();
-const month = args.m? args.m : today.getMonth() + 1;
-
 function outputCalendar(year, month) {
   const firstDay = new Date(year, month - 1, 1);
   const lastDay = new Date(year, month, 0);
@@ -22,4 +17,10 @@ function outputCalendar(year, month) {
   }
   process.stdout.write("\n");
 }
+
+const today = new Date();
+const args = minimist(process.argv.slice(2));
+const year = args.y? args.y : today.getFullYear();
+const month = args.m? args.m : today.getMonth() + 1;
+
 outputCalendar(year, month);
