@@ -8,15 +8,15 @@ function outputCalendar(year, month) {
 
   process.stdout.write("   ".repeat(firstWeekDay));
 
-  for (let i = 1; i <= lastDate; ++i) {
+  for (let i = 1; i <= lastDate; i++) {
     process.stdout.write(`${i.toString().padStart(2)}`);
     if ((firstWeekDay + i) % 7 === 0  || i === lastDate) {
-      process.stdout.write("\n");
+      console.log();
     } else {
       process.stdout.write(" ");
     }
   }
-  process.stdout.write("\n");
+  console.log();
 }
 
 const today = new Date();
