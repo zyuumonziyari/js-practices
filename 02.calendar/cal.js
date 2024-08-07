@@ -10,7 +10,7 @@ function outputCalendar(year, month) {
 
   for (let i = 1; i <= lastDate; i++) {
     process.stdout.write(`${i.toString().padStart(2)}`);
-    if ((firstWeekDay + i) % 7 === 0  || i === lastDate) {
+    if ((firstWeekDay + i) % 7 === 0 || i === lastDate) {
       console.log();
     } else {
       process.stdout.write(" ");
@@ -21,7 +21,7 @@ function outputCalendar(year, month) {
 
 const today = new Date();
 const args = minimist(process.argv.slice(2));
-const year = args.y? args.y : today.getFullYear();
-const month = args.m? args.m : today.getMonth() + 1;
+const year = args.y ? args.y : today.getFullYear();
+const month = args.m ? args.m : today.getMonth() + 1;
 
 outputCalendar(year, month);
