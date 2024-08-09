@@ -16,6 +16,7 @@ function outputCalendar(year, month) {
   }
   console.log();
 }
+
 const today = new Date();
 const args = minimist(process.argv.slice(2));
 const year = args.y ? args.y : today.getFullYear();
