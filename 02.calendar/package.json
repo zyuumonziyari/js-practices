@@ -1,4 +1,6 @@
-{
+{ 
+  "name": "my-calendar",
+  "type": "module",
   "scripts": {
     "fix": "prettier --write . && eslint --fix .",
     "lint": "prettier --check . && eslint ."
@@ -13,5 +15,7 @@
   "dependencies": {
     "minimist": "^1.2.8"
   },
-  "type": "module"
+  "bin": {
+    "cal.js": "./cal.js"
+  }
 }
