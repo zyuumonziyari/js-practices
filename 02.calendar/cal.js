@@ -16,7 +16,6 @@ function outputCalendar(year, month) {
       process.stdout.write(" ");
     }
   }
-  console.log();
 }
 
 const today = new Date();
