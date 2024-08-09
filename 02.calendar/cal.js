@@ -10,9 +10,16 @@ function outputCalendar(year, month) {
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
   process.stdout.write("   ".repeat(firstDate.getDay()));
-  for (let date = firstDate; date <= lastDate; date.setDate(date.getDate() + 1)) {
+  for (
+    let date = firstDate;
+    date <= lastDate;
+    date.setDate(date.getDate() + 1)
+  ) {
     process.stdout.write(date.getDate().toString().padStart(2));
-    if ((firstWeekday + date.getDate()) % 7 === 0 || date.getDate() === lastDate.getDate()) {
+    if (
+      (firstWeekday + date.getDate()) % 7 === 0 ||
+      date.getDate() === lastDate.getDate()
+    ) {
       console.log();
     } else {
       process.stdout.write(" ");
