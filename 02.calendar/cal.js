@@ -8,11 +8,11 @@ function outputCalendar(year, month) {
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
   process.stdout.write("   ".repeat(firstDate.getDay()));
-  for (;firstDate <= lastDate; firstDate.setDate(firstDate.getDate() + 1)) {
-    process.stdout.write(firstDate.getDate().toString().padStart(2));
+  for (let currentDate = new Date(firstDate) ;currentDate <= lastDate; currentDate.setDate(currentDate.getDate() + 1)) {
+    process.stdout.write(currentDate.getDate().toString().padStart(2));
     if (
-      firstDate.getDay() === 6 ||
-      firstDate.getDate() === lastDate.getDate()
+      currentDate.getDay() === 6 ||
+      currentDate.getDate() === lastDate.getDate()
     ) {
       console.log();
     } else {
@@ -25,4 +25,5 @@ const today = new Date();
 const args = minimist(process.argv.slice(2));
 const year = args.y ?? today.getFullYear();
 const month = args.m ?? today.getMonth() + 1;
+
 outputCalendar(year, month);
