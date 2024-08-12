@@ -8,7 +8,11 @@ function outputCalendar(year, month) {
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
   process.stdout.write("   ".repeat(firstDate.getDay()));
-  for (let currentDate = new Date(firstDate) ;currentDate <= lastDate; currentDate.setDate(currentDate.getDate() + 1)) {
+  for (
+    let currentDate = new Date(firstDate);
+    currentDate <= lastDate;
+    currentDate.setDate(currentDate.getDate() + 1)
+  ) {
     process.stdout.write(currentDate.getDate().toString().padStart(2));
     if (
       currentDate.getDay() === 6 ||
