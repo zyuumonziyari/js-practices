@@ -25,6 +25,6 @@ function outputCalendar(year, month) {
 
 const today = new Date();
 const args = minimist(process.argv.slice(2));
-const year = args.y || today.getFullYear();
-const month = args.m || today.getMonth() + 1;
+const year = args.y ?? today.getFullYear();
+const month = args.m ?? today.getMonth() + 1;
 outputCalendar(year, month);
