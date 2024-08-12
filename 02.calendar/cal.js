@@ -8,7 +8,7 @@ function outputCalendar(year, month) {
   console.log(`      ${month}月 ${year}`);
   console.log("日 月 火 水 木 金 土");
   process.stdout.write("   ".repeat(firstDate.getDay()));
-  while (firstDate <= lastDate) {
+  for (;firstDate <= lastDate; firstDate.setDate(firstDate.getDate() + 1)) {
     process.stdout.write(firstDate.getDate().toString().padStart(2));
     if (
       firstDate.getDay() === 6 ||
@@ -18,7 +18,6 @@ function outputCalendar(year, month) {
     } else {
       process.stdout.write(" ");
     }
-    firstDate.setDate(firstDate.getDate() + 1);
   }
 }
 
