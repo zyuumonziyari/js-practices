@@ -41,7 +41,7 @@ function fetchAllBooks(db) {
 }
 
 function initializeAndExecute() {
-  const data = fs.readFileSync("books.json", "utf8");
+  const data = fs.readFileSync("books.json");
   const books = JSON.parse(data);
   const db = new sqlite3.Database(":memory:");
 
