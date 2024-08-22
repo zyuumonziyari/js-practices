@@ -45,7 +45,6 @@ function initializeAndExecute() {
 
     books.forEach((book) => {
       insertBook(insert_statement, book, () => {
-
         insertCount++;
         if (insertCount === books.length) {
           insert_statement.finalize(() => {
