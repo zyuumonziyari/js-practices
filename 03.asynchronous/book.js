@@ -3,7 +3,7 @@ import sqlite3 from "sqlite3";
 
 function outputData() {
   const db = new sqlite3.Database(":memory:");
-  const data = fs.readFileSync("books.json", "utf8");
+  const data = fs.readFileSync("books.json");
   const books = JSON.parse(data);
 
   db.run(
