@@ -4,7 +4,7 @@ import sqlite3 from "sqlite3";
 function createTable(db, callback) {
   db.run(
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-    callback
+    callback,
   );
 }
 
