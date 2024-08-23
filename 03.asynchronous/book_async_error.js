@@ -1,57 +1,7 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
-
-function createTable(db) {
-  return new Promise((resolve) => {
-    db.run(
-      "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-      function () {
-        resolve();
-      },
-    );
-  });
-}
-
-function insertBooks(db, books) {
-  return new Promise((resolve) => {
-    const insert_statement = db.prepare("INSERT INTO books (title) VALUES (?)");
-
-    const promises = books.map((book) => {
-      return new Promise((resolve, reject) => {
-        insert_statement.run(book.title, function (err) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(this.lastID);
-          }
-        });
-      });
-    });
-
-    Promise.allSettled(promises).then((results) => {
-      const ids = results
-        .filter((result) => result.status === "fulfilled")
-        .map((result) => result.value);
-
-      const reasons = results
-        .filter((result) => result.status === "rejected")
-        .map((result) => `エラー: ${result.reason}`);
-
-      insert_statement.finalize(() => {
-        resolve({ ids, reasons });
-      });
-    });
-  });
-}
-
-function fetchAllBooks(db) {
-  return new Promise((resolve, reject) => {
-    db.all("SELECT author FROM books", (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
-}
+import {createTable} from "./book_promise.js";
+import {insertBooks, fetchAllBooks} from "./book_promise_error.js";
 
 async function initializeAndExecute() {
   const data = fs.readFileSync("books_error.json");

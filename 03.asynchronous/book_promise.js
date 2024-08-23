@@ -1,7 +1,7 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
 
-function createTable(db) {
+export function createTable(db) {
   return new Promise((resolve) => {
     db.run(
       "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
@@ -12,7 +12,7 @@ function createTable(db) {
   });
 }
 
-function insertBooks(db, books) {
+export function insertBooks(db, books) {
   return new Promise((resolve) => {
     const insert_statement = db.prepare("INSERT INTO books (title) VALUES (?)");
 
@@ -32,7 +32,7 @@ function insertBooks(db, books) {
   });
 }
 
-function fetchAllBooks(db) {
+export function fetchAllBooks(db) {
   return new Promise((resolve) => {
     db.all("SELECT title FROM books", (_, rows) => {
       resolve(rows);
@@ -49,7 +49,7 @@ function initializeAndExecute() {
     .then(() => insertBooks(db, books))
     .then((ids) => {
       ids.forEach((id) => {
-        console.log(`新しく挿入されたレコードのID: ${id}`);
+        console.log(`新しく挿入されたレコードのid: ${id}`);
       });
       return fetchAllBooks(db);
     })
@@ -61,4 +61,6 @@ function initializeAndExecute() {
     .finally(() => db.close());
 }
 
-initializeAndExecute();
+if (import.meta.url === `file://${process.argv[1]}`) {
+  initializeAndExecute();
+}
