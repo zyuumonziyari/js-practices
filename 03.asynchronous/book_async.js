@@ -1,6 +1,6 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
-import {createTable, insertBooks, fetchAllBooks} from "./book_promise.js";
+import { createTable, insertBooks, fetchAllBooks } from "./book_promise.js";
 
 async function initializeAndExecute() {
   const data = fs.readFileSync("books.json");
