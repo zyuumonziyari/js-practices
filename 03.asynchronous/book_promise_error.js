@@ -68,7 +68,7 @@ function initializeAndExecute() {
       console.error("エラーが発生しました:", err.message);
     })
     .finally(() => {
-      closeTable(db).then(() => { 
+      closeTable(db).then(() => {
         db.close();
       });
     });

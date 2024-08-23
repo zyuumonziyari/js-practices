@@ -41,8 +41,8 @@ export function fetchAllBooks(db) {
 }
 
 export function closeTable(db) {
-  return new Promise((resolve) =>{
-    db.run("DROP TABLE BOOKS", function() {
+  return new Promise((resolve) => {
+    db.run("DROP TABLE BOOKS", function () {
       resolve();
     });
   });
@@ -67,7 +67,7 @@ function initializeAndExecute() {
       });
     })
     .finally(() => {
-      closeTable(db).then(() => { 
+      closeTable(db).then(() => {
         db.close();
       });
     });
