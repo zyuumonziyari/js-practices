@@ -1,6 +1,6 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
-import { createTable } from "./book_promise.js";
+import { createTable, closeTable } from "./book_promise.js";
 import { insertBooks, fetchAllBooks } from "./book_promise_error.js";
 
 async function initializeAndExecute() {
@@ -24,6 +24,7 @@ async function initializeAndExecute() {
   } catch (err) {
     console.error("エラーが発生しました:", err.message);
   } finally {
+    await closeTable(db);
     db.close();
   }
 }
