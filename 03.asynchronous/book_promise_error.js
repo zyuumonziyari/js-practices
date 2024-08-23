@@ -25,7 +25,7 @@ export function insertBooks(db, books) {
 
       const reasons = results
         .filter((result) => result.status === "rejected")
-        .map((result) => `エラー: ${result.reason}`);
+        .map((result) => `エラーが発生しました: ${result.reason}`);
 
       insert_statement.finalize(() => {
         resolve({ ids, reasons });

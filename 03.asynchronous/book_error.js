@@ -5,7 +5,7 @@ import { createTable, closeTable } from "./book.js";
 function insertBook(insert_statement, book, callback) {
   insert_statement.run(book.title, function (err) {
     if (err) {
-      console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+      console.error(`エラーが発生しました: ${err.message}`);
       callback(err);
     } else {
       console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
@@ -17,7 +17,7 @@ function insertBook(insert_statement, book, callback) {
 function fetchAllBooks(db, callback) {
   db.all("SELECT author FROM books", function (err, rows) {
     if (err) {
-      console.error("データ取得時にエラーが発生しました:", err.message);
+      console.error("エラーが発生しました:", err.message);
       callback(err);
     } else {
       rows.forEach((row) => {
