@@ -1,6 +1,6 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
-import { createTable } from "./book_promise.js";
+import { createTable, closeTable } from "./book_promise.js";
 
 export function insertBooks(db, books) {
   return new Promise((resolve) => {
@@ -67,7 +67,11 @@ function initializeAndExecute() {
     .catch((err) => {
       console.error("エラーが発生しました:", err.message);
     })
-    .finally(() => db.close());
+    .finally(() => {
+      closeTable(db).then(() => { 
+        db.close();
+      });
+    });
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

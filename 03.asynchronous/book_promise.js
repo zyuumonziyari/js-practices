@@ -40,6 +40,14 @@ export function fetchAllBooks(db) {
   });
 }
 
+export function closeTable(db) {
+  return new Promise((resolve) =>{
+    db.run("DROP TABLE BOOKS", function() {
+      resolve();
+    });
+  });
+}
+
 function initializeAndExecute() {
   const data = fs.readFileSync("books.json");
   const books = JSON.parse(data);
@@ -58,7 +66,11 @@ function initializeAndExecute() {
         console.log(`新しく作成されたレコード値: ${row.title}`);
       });
     })
-    .finally(() => db.close());
+    .finally(() => {
+      closeTable(db).then(() => { 
+        db.close();
+      });
+    });
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
