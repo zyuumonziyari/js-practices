@@ -1,7 +1,7 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
 
-function createTable(db, callback) {
+export function createTable(db, callback) {
   db.run(
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     callback,
@@ -24,6 +24,10 @@ function fetchAllBooks(db, callback) {
   });
 }
 
+export function closeTable(db, callback) {
+  db.run("DROP TABLE BOOKS", callback);
+}
+
 function initializeAndExecute() {
   const db = new sqlite3.Database(":memory:");
   const data = fs.readFileSync("books.json");
@@ -39,7 +43,9 @@ function initializeAndExecute() {
         if (insertCount === books.length) {
           insert_statement.finalize(() => {
             fetchAllBooks(db, () => {
-              db.close();
+              closeTable(db, () => {
+                db.close();
+              });
             });
           });
         }
@@ -48,4 +54,6 @@ function initializeAndExecute() {
   });
 }
 
-initializeAndExecute();
+if (import.meta.url === `file://${process.argv[1]}`) {
+  initializeAndExecute();
+}
