@@ -1,12 +1,6 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
-
-function createTable(db, callback) {
-  db.run(
-    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-    callback,
-  );
-}
+import { createTable, closeTable } from "./book.js";
 
 function insertBook(insert_statement, book, callback) {
   insert_statement.run(book.title, function (err) {
@@ -49,7 +43,9 @@ function initializeAndExecute() {
         if (insertCount === books.length) {
           insert_statement.finalize(() => {
             fetchAllBooks(db, () => {
-              db.close();
+              closeTable(db, () => {
+                db.close();
+              });
             });
           });
         }
