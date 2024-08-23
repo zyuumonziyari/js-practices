@@ -1,18 +1,8 @@
 import fs from "fs";
 import sqlite3 from "sqlite3";
+import {createTable} from "./book_promise.js";
 
-function createTable(db) {
-  return new Promise((resolve) => {
-    db.run(
-      "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-      function () {
-        resolve();
-      },
-    );
-  });
-}
-
-function insertBooks(db, books) {
+export function insertBooks(db, books) {
   return new Promise((resolve) => {
     const insert_statement = db.prepare("INSERT INTO books (title) VALUES (?)");
 
@@ -44,7 +34,7 @@ function insertBooks(db, books) {
   });
 }
 
-function fetchAllBooks(db) {
+export function fetchAllBooks(db) {
   return new Promise((resolve, reject) => {
     db.all("SELECT author FROM books", (err, rows) => {
       if (err) reject(err);
@@ -80,4 +70,6 @@ function initializeAndExecute() {
     .finally(() => db.close());
 }
 
-initializeAndExecute();
+if (import.meta.url === `file://${process.argv[1]}`) {
+  initializeAndExecute();
+}
