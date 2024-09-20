@@ -4,11 +4,11 @@ import { createTable, closeTable } from "./book_promise.js";
 
 export function insertBooks(db, books) {
   return new Promise((resolve) => {
-    const insert_statement = db.prepare("INSERT INTO books (title) VALUES (?)");
+    const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
 
     const promises = books.map((book) => {
       return new Promise((resolve, reject) => {
-        insert_statement.run(book.title, function (err) {
+        insertStatement.run(book.title, function (err) {
           if (err) {
             reject(err);
           } else {
@@ -27,7 +27,7 @@ export function insertBooks(db, books) {
         .filter((result) => result.status === "rejected")
         .map((result) => `エラー: ${result.reason}`);
 
-      insert_statement.finalize(() => {
+      insertStatement.finalize(() => {
         resolve({ ids, reasons });
       });
     });

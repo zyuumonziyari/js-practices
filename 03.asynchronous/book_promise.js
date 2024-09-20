@@ -14,18 +14,18 @@ export function createTable(db) {
 
 export function insertBooks(db, books) {
   return new Promise((resolve) => {
-    const insert_statement = db.prepare("INSERT INTO books (title) VALUES (?)");
+    const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
 
     const promises = books.map((book) => {
       return new Promise((resolve) => {
-        insert_statement.run(book.title, function () {
+        insertStatement.run(book.title, function () {
           resolve(this.lastID);
         });
       });
     });
 
     Promise.all(promises).then((ids) => {
-      insert_statement.finalize(function () {
+      insertStatement.finalize(function () {
         resolve(ids);
       });
     });
