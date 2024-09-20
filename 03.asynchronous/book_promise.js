@@ -48,7 +48,7 @@ export function closeTable(db) {
   });
 }
 
-function initializeAndExecute() {
+function main() {
   const data = fs.readFileSync("books.json");
   const books = JSON.parse(data);
   const db = new sqlite3.Database(":memory:");
@@ -74,5 +74,5 @@ function initializeAndExecute() {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  initializeAndExecute();
+  main();
 }
