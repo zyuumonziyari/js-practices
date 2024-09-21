@@ -1,10 +1,12 @@
-import fs from "fs";
 import sqlite3 from "sqlite3";
 
 function main() {
   const db = new sqlite3.Database(":memory:");
-  const data = fs.readFileSync("books_error.json");
-  const books = JSON.parse(data);
+  const books = [
+    { title: "カビゴン" },
+    { title: "カビゴン" },
+    { title: "ヤドン" }
+  ];
 
   db.run("CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)", function() {
     const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
