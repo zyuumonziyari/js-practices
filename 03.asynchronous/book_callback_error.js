@@ -5,42 +5,50 @@ function main() {
   const books = [
     { title: "カビゴン" },
     { title: "カビゴン" },
-    { title: "ヤドン" }
+    { title: "ヤドン" },
   ];
 
-  db.run("CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)", function() {
-    const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
-    let insertCount = 0;
+  db.run(
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+    function () {
+      const insertStatement = db.prepare(
+        "INSERT INTO books (title) VALUES (?)",
+      );
+      let insertCount = 0;
 
-    books.forEach((book) => {
-      insertStatement.run(book.title, function (err) {
-        if (err) {
-          console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
-        } else {
-          console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-        }
-        insertCount++;
+      books.forEach((book) => {
+        insertStatement.run(book.title, function (err) {
+          if (err) {
+            console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+          } else {
+            console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+          }
+          insertCount++;
 
-        if (insertCount === books.length) {
-          insertStatement.finalize(() => {
-            db.all("SELECT author FROM books", function (err, rows) {
-              if (err) {
-                console.error("データ取得時にエラーが発生しました:", err.message);
-              } else {
-                rows.forEach((row) => {
-                  console.log(`新しく作成されたレコード値: ${row.title}`);
+          if (insertCount === books.length) {
+            insertStatement.finalize(() => {
+              db.all("SELECT author FROM books", function (err, rows) {
+                if (err) {
+                  console.error(
+                    "データ取得時にエラーが発生しました:",
+                    err.message,
+                  );
+                } else {
+                  rows.forEach((row) => {
+                    console.log(`新しく作成されたレコード値: ${row.title}`);
+                  });
+                }
+
+                db.run("DROP TABLE books", function () {
+                  db.close();
                 });
-              }
-
-              db.run("DROP TABLE books", function () {
-                db.close();
               });
             });
-          });
-        }
+          }
+        });
       });
-    });
-  });
+    },
+  );
 }
 
 main();
