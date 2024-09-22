@@ -1,0 +1,78 @@
+import fs from "fs";
+import sqlite3 from "sqlite3";
+
+export function createTable(db) {
+  return new Promise((resolve) => {
+    db.run(
+      "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+      function () {
+        resolve();
+      },
+    );
+  });
+}
+
+export function insertBooks(db, books) {
+  return new Promise((resolve) => {
+    const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
+
+    const promises = books.map((book) => {
+      return new Promise((resolve) => {
+        insertStatement.run(book.title, function () {
+          resolve(this.lastID);
+        });
+      });
+    });
+
+    Promise.all(promises).then((ids) => {
+      insertStatement.finalize(function () {
+        resolve(ids);
+      });
+    });
+  });
+}
+
+export function fetchAllBooks(db) {
+  return new Promise((resolve) => {
+    db.all("SELECT title FROM books", (_, rows) => {
+      resolve(rows);
+    });
+  });
+}
+
+export function closeTable(db) {
+  return new Promise((resolve) => {
+    db.run("DROP TABLE BOOKS", function () {
+      resolve();
+    });
+  });
+}
+
+function main() {
+  const data = fs.readFileSync("books.json");
+  const books = JSON.parse(data);
+  const db = new sqlite3.Database(":memory:");
+
+  createTable(db)
+    .then(() => insertBooks(db, books))
+    .then((ids) => {
+      ids.forEach((id) => {
+        console.log(`新しく挿入されたレコードのid: ${id}`);
+      });
+      return fetchAllBooks(db);
+    })
+    .then((rows) => {
+      rows.forEach((row) => {
+        console.log(`新しく作成されたレコード値: ${row.title}`);
+      });
+    })
+    .finally(() => {
+      closeTable(db).then(() => {
+        db.close();
+      });
+    });
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}
