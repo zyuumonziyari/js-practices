@@ -14,13 +14,12 @@ function main() {
       const insertStatement = db.prepare(
         "INSERT INTO books (title) VALUES (?)",
       );
-      let insertCount = 0;
-
-      books.forEach((book) => {
-        insertStatement.run(book.title, function () {
+      insertStatement.run(books[0].title, function() {
+        console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+        insertStatement.run(books[1].title, function() {
           console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-          insertCount++;
-          if (insertCount === books.length) {
+          insertStatement.run(books[2].title, function() {
+            console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
             insertStatement.finalize(() => {
               db.all("SELECT title FROM books", function (_, rows) {
                 rows.forEach((row) => {
@@ -31,11 +30,10 @@ function main() {
                 });
               });
             });
-          }
+          });
         });
       });
-    },
+    }
   );
-}
-
+};
 main();
