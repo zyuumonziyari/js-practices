@@ -9,8 +9,7 @@ function main() {
   ];
 
   db.run(
-    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-    function () {
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)", () => {
       const insertStatement = db.prepare(
         "INSERT INTO books (title) VALUES (?)",
       );
@@ -21,11 +20,11 @@ function main() {
           insertStatement.run(books[2].title, function() {
             console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
             insertStatement.finalize(() => {
-              db.all("SELECT title FROM books", function (_, rows) {
+              db.all("SELECT title FROM books", (_, rows) => {
                 rows.forEach((row) => {
                   console.log(`新しく作成されたレコード値: ${row.title}`);
                 });
-                db.run("DROP TABLE books", function () {
+                db.run("DROP TABLE books", () => {
                   db.close();
                 });
               });
