@@ -9,45 +9,46 @@ function main() {
   ];
 
   db.run(
-    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-    function () {
-      const insertStatement = db.prepare(
-        "INSERT INTO books (title) VALUES (?)",
-      );
-      let insertCount = 0;
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)", 
+    () => {
+      const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
 
-      books.forEach((book) => {
-        insertStatement.run(book.title, function (err) {
-          if (err) {
-            console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
-          } else {
-            console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-          }
-          insertCount++;
+      insertStatement.run(books[0].title, function(err) {
+        if (err) {
+          console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+        } else {
+          console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
 
-          if (insertCount === books.length) {
-            insertStatement.finalize(() => {
-              db.all("SELECT author FROM books", function (err, rows) {
+          insertStatement.run(books[1].title, function(err) {
+            if (err) {
+              console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+            } else {
+              console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+
+              insertStatement.run(books[2].title, function(err) {
                 if (err) {
-                  console.error(
-                    "データ取得時にエラーが発生しました:",
-                    err.message,
-                  );
+                  console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
                 } else {
-                  rows.forEach((row) => {
-                    console.log(`新しく作成されたレコード値: ${row.title}`);
+                  console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+
+                  insertStatement.finalize(() => {
+                    db.all("SELECT title FROM books", (_, rows) => {
+                      rows.forEach((row) => {
+                        console.log(`新しく作成されたレコード値: ${row.title}`);
+                      });
+
+                      db.run("DROP TABLE books", () => {
+                        db.close();
+                      });
+                    });
                   });
                 }
-
-                db.run("DROP TABLE books", function () {
-                  db.close();
-                });
               });
-            });
-          }
-        });
+            }
+          });
+        }
       });
-    },
+    }
   );
 }
 
