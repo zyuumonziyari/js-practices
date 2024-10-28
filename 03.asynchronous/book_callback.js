@@ -9,15 +9,16 @@ function main() {
   ];
 
   db.run(
-    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)", () => {
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+    () => {
       const insertStatement = db.prepare(
         "INSERT INTO books (title) VALUES (?)",
       );
-      insertStatement.run(books[0].title, function() {
+      insertStatement.run(books[0].title, function () {
         console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-        insertStatement.run(books[1].title, function() {
+        insertStatement.run(books[1].title, function () {
           console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-          insertStatement.run(books[2].title, function() {
+          insertStatement.run(books[2].title, function () {
             console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
             insertStatement.finalize(() => {
               db.all("SELECT title FROM books", (_, rows) => {
@@ -32,7 +33,7 @@ function main() {
           });
         });
       });
-    }
+    },
   );
-};
+}
 main();

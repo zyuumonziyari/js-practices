@@ -9,25 +9,31 @@ function main() {
   ];
 
   db.run(
-    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)", 
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     () => {
-      const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
+      const insertStatement = db.prepare(
+        "INSERT INTO books (title) VALUES (?)",
+      );
 
-      insertStatement.run(books[0].title, function(err) {
+      insertStatement.run(books[0].title, function (err) {
         if (err) {
           console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
         } else {
           console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
 
-          insertStatement.run(books[1].title, function(err) {
+          insertStatement.run(books[1].title, function (err) {
             if (err) {
-              console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+              console.error(
+                `データ挿入時にエラーが発生しました: ${err.message}`,
+              );
             } else {
               console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
 
-              insertStatement.run(books[2].title, function(err) {
+              insertStatement.run(books[2].title, function (err) {
                 if (err) {
-                  console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+                  console.error(
+                    `データ挿入時にエラーが発生しました: ${err.message}`,
+                  );
                 } else {
                   console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
 
@@ -48,7 +54,7 @@ function main() {
           });
         }
       });
-    }
+    },
   );
 }
 
