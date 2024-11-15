@@ -11,7 +11,7 @@ function main() {
   return new Promise((resolve) => {
     db.run(
       "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-      function () {
+      () => {
         resolve();
       }
     );
@@ -58,7 +58,7 @@ function main() {
   })
   .then(() => {
     return new Promise((resolve) => {
-      db.run("DROP TABLE books", function () {
+      db.run("DROP TABLE books", () => {
         resolve();
       });
     });
