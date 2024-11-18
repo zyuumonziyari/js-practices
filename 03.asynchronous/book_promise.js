@@ -1,4 +1,5 @@
 import sqlite3 from "sqlite3";
+import { runPromise } from "./book_utils.js";
 
 function main() {
   const db = new sqlite3.Database(":memory:");
@@ -8,42 +9,27 @@ function main() {
     { title: "ヤドン" },
   ];
 
-  return new Promise((resolve) => {
-    db.run(
-      "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-      () => {
-        resolve();
-      },
-    );
-  })
+  runPromise(db,
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)")
     .then(() => {
-      const insertStatement = db.prepare(
-        "INSERT INTO books (title) VALUES (?)",
-      );
-      return new Promise((resolve) => {
-        insertStatement.run(books[0].title, function () {
-          console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-          resolve(this.lastID);
+      const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
+      const insertBook = (book) => {
+        return new Promise((resolve) => {
+          insertStatement.run(book.title, function () {
+            console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+            resolve(this.lastID);
+          });
         });
-      })
+      };
+      return insertBook(books[0])
+        .then(() => insertBook(books[1]))
+        .then(() => insertBook(books[2]))
         .then(() => {
           return new Promise((resolve) => {
-            insertStatement.run(books[1].title, function () {
-              console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-              resolve(this.lastID);
+            insertStatement.finalize(() => {
+              resolve();
             });
           });
-        })
-        .then(() => {
-          return new Promise((resolve) => {
-            insertStatement.run(books[2].title, function () {
-              console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-              resolve(this.lastID);
-            });
-          });
-        })
-        .then(() => {
-          insertStatement.finalize();
         });
     })
     .then(() => {
@@ -59,11 +45,7 @@ function main() {
       });
     })
     .then(() => {
-      return new Promise((resolve) => {
-        db.run("DROP TABLE books", () => {
-          resolve();
-        });
-      });
+        runPromise(db, "DROP TABLE books")      
     })
     .finally(() => {
       db.close();
