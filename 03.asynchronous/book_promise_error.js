@@ -1,79 +1,82 @@
-import fs from "fs";
 import sqlite3 from "sqlite3";
-import { createTable, closeTable } from "./book_promise.js";
-
-export function insertBooks(db, books) {
-  return new Promise((resolve) => {
-    const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
-
-    const promises = books.map((book) => {
-      return new Promise((resolve, reject) => {
-        insertStatement.run(book.title, function (err) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(this.lastID);
-          }
-        });
-      });
-    });
-
-    Promise.allSettled(promises).then((results) => {
-      const ids = results
-        .filter((result) => result.status === "fulfilled")
-        .map((result) => result.value);
-
-      const reasons = results
-        .filter((result) => result.status === "rejected")
-        .map((result) => `エラー: ${result.reason}`);
-
-      insertStatement.finalize(() => {
-        resolve({ ids, reasons });
-      });
-    });
-  });
-}
-
-export function fetchAllBooks(db) {
-  return new Promise((resolve, reject) => {
-    db.all("SELECT author FROM books", (err, rows) => {
-      if (err) reject(err);
-      resolve(rows);
-    });
-  });
-}
+import { runPromise } from "./book_utils.js";
 
 function main() {
-  const data = fs.readFileSync("books_error.json");
-  const books = JSON.parse(data);
   const db = new sqlite3.Database(":memory:");
+  const books = [
+    { title: "カビゴン" },
+    { title: "カビゴン" },
+    { title: "ヤドン" },
+  ];
 
-  createTable(db)
-    .then(() => insertBooks(db, books))
-    .then(({ ids, reasons }) => {
-      ids.forEach((id) => {
-        console.log(`新しく挿入されたレコードのID: ${id}`);
-      });
-      reasons.forEach((reason) => {
-        console.error(reason);
-      });
-      return fetchAllBooks(db);
+  runPromise(db,
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)")
+    .then(() => {
+      const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
+      
+      return new Promise((resolve) => {
+        insertStatement.run(books[0].title, function (err) {
+          if (err) {
+            console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+          } else {
+            console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+            resolve(this.lastID);
+          }
+          });
+      })
+        .then(() => {
+          return new Promise((resolve) => {
+            insertStatement.run(books[1].title, function (err) {
+              if (err) {
+                console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+              } else {
+                console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+                resolve(this.lastID);
+              }
+            });
+          });
+        })
+        .then(() => {
+          return new Promise((resolve) => {
+            insertStatement.run(books[2].title, function (err) {
+              if (err) {
+                console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+              } else {
+                console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+                resolve(this.lastID);
+              }
+            });
+          });
+        })
+        .then(() => {
+          return new Promise((resolve) => {
+            insertStatement.finalize(() => {
+              resolve();
+            });
+          });
+        });
     })
-    .then((rows) => {
-      rows.forEach((row) => {
-        console.log(`新しく作成されたレコード値: ${row.title}`);
+    .then(() => {
+      return new Promise((resolve) => {
+        db.all("SELECT name FROM books", (err, rows) => {
+          if (err) {
+            console.error(
+              `データ取得時にエラーが発生しました: ${err.message}`,
+            );
+          } else {
+          rows.forEach((row) => {
+            console.log(`新しく作成されたレコード値: ${row.title}`);
+          });
+          resolve(rows);
+        }
+        });
       });
     })
-    .catch((err) => {
-      console.error("エラーが発生しました:", err.message);
+    .then(() => {
+        runPromise(db, "DROP TABLE books")      
     })
     .finally(() => {
-      closeTable(db).then(() => {
-        db.close();
-      });
+      db.close();
     });
 }
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
-}
+main();
