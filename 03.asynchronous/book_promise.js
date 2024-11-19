@@ -35,13 +35,11 @@ function main() {
     .then(() => {
       return new Promise((resolve) => {
         db.all("SELECT title FROM books", (_, rows) => {
+          rows.forEach((row) => {
+            console.log(`新しく作成されたレコード値: ${row.title}`);
+          });
           resolve(rows);
         });
-      });
-    })
-    .then((rows) => {
-      rows.forEach((row) => {
-        console.log(`新しく作成されたレコード値: ${row.title}`);
       });
     })
     .then(() => {
