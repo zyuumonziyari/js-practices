@@ -20,42 +20,44 @@ function main() {
           console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
         } else {
           console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+        }
 
-          insertStatement.run(books[1].title, function (err) {
+        insertStatement.run(books[1].title, function (err) {
+          if (err) {
+            console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+          } else {
+            console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+          }
+
+          insertStatement.run(books[2].title, function (err) {
             if (err) {
               console.error(
                 `データ挿入時にエラーが発生しました: ${err.message}`,
               );
             } else {
               console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+            }
 
-              insertStatement.run(books[2].title, function (err) {
+            insertStatement.finalize(() => {
+              db.all("SELECT name FROM books", (err, rows) => {
                 if (err) {
                   console.error(
-                    `データ挿入時にエラーが発生しました: ${err.message}`,
+                    `データ取得時にエラーが発生しました: ${err.message}`,
                   );
                 } else {
-                  console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-
-                  insertStatement.finalize(() => {
-                    db.all("SELECT title FROM books", (_, rows) => {
-                      rows.forEach((row) => {
-                        console.log(`新しく作成されたレコード値: ${row.title}`);
-                      });
-
-                      db.run("DROP TABLE books", () => {
-                        db.close();
-                      });
-                    });
+                  rows.forEach((row) => {
+                    console.log(`新しく作成されたレコード値: ${row.title}`);
                   });
                 }
+                db.run("DROP TABLE books", () => {
+                  db.close();
+                });
               });
-            }
+            });
           });
-        }
+        });
       });
     },
   );
 }
-
 main();
