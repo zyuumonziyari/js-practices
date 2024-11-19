@@ -13,17 +13,29 @@ function main() {
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)")
     .then(() => {
       const insertStatement = db.prepare("INSERT INTO books (title) VALUES (?)");
-      const insertBook = (book) => {
-        return new Promise((resolve) => {
-          insertStatement.run(book.title, function () {
-            console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-            resolve(this.lastID);
-          });
+      
+      return new Promise((resolve) => {
+        insertStatement.run(books[0].title, function () {
+          console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+          resolve(this.lastID);
         });
-      };
-      return insertBook(books[0])
-        .then(() => insertBook(books[1]))
-        .then(() => insertBook(books[2]))
+      })
+        .then(() => {
+          return new Promise((resolve) => {
+            insertStatement.run(books[1].title, function () {
+              console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+              resolve(this.lastID);
+            });
+          });
+        })
+        .then(() => {
+          return new Promise((resolve) => {
+            insertStatement.run(books[2].title, function () {
+              console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+              resolve(this.lastID);
+            });
+          });
+        })
         .then(() => {
           return new Promise((resolve) => {
             insertStatement.finalize(() => {
