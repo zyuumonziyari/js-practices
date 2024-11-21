@@ -34,30 +34,15 @@ export const insertAsyncpromise = (db, title) => {
 
 export const allPromise = (db, query) => {
   return new Promise((resolve, reject) => {
-      db.all(query, (err, rows) => {
-        if (err) {
-          console.error(`データ取得時にエラーが発生しました: ${err.message}`);
-          reject(err);
-        } else {
-          rows.forEach((row) => {
-            console.log(`新しく作成されたレコード値: ${row.title}`);
-          });
-          resolve(rows);
-        }
-      });
+    db.all(query, (err, rows) => {
+      if (err) {
+        reject(new Error(`データ取得時にエラーが発生しました: ${err.message}`));
+      } else {
+        rows.forEach((row) => {
+          console.log(`新しく作成されたレコード値: ${row.title}`);
+        });
+        resolve(rows);
+      }
     });
-}
-export const allAsyncpromise = (db, query) => {
-  return new Promise((resolve, reject) => {
-      db.all(query, (err, rows) => {
-        if (err) {
-          reject(new Error(`データ取得時にエラーが発生しました: ${err.message}`));
-        } else {
-          rows.forEach((row) => {
-            console.log(`新しく作成されたレコード値: ${row.title}`);
-          });
-          resolve(rows);
-        }
-      });
-    });
+  });
 }

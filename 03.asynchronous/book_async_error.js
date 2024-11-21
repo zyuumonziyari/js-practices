@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { runPromise, insertAsyncpromise, allAsyncpromise } from "./book_utils.js";
+import { runPromise, insertAsyncpromise, allPromise } from "./book_utils.js";
 
 async function main() {
   const db = new sqlite3.Database(":memory:");
@@ -19,7 +19,7 @@ async function main() {
   }
 
   try {  
-    await allAsyncpromise(db, "SELECT name FROM books");
+    await allPromise(db, "SELECT name FROM books");
   } catch (selectError) {
     console.error(selectError.message);
   }

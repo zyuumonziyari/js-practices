@@ -14,6 +14,9 @@ function main() {
       const bookPromises = books.map((book) => insertPromise(db, book.title));
       return Promise.allSettled(bookPromises)
     })
+    .catch((error) => {
+      console.error(`エラーが発生しました: ${error.message}`);
+    })
     .then(() => {
       return allPromise(db, "SELECT name FROM books");
     })
