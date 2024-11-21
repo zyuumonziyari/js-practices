@@ -1,32 +1,23 @@
-import fs from "fs";
 import sqlite3 from "sqlite3";
-import { createTable, closeTable } from "./book_promise.js";
-import { insertBooks, fetchAllBooks } from "./book_promise_error.js";
+import { runPromise, insertAsyncpromise, allPromise } from "./book_utils.js";
 
 async function main() {
-  const data = fs.readFileSync("books_error.json");
-  const books = JSON.parse(data);
   const db = new sqlite3.Database(":memory:");
+  const books = [
+    { title: "カビゴン" },
+    { title: "カビゴン" },
+    { title: "ヤドン" },
+  ];
 
+  await runPromise(db, "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)")
   try {
-    await createTable(db);
-    const { ids, reasons } = await insertBooks(db, books);
-    ids.forEach((id) => {
-      console.log(`新しく挿入されたレコードのID: ${id}`);
-    });
-    reasons.forEach((reason) => {
-      console.error(reason);
-    });
-    const rows = await fetchAllBooks(db);
-    rows.forEach((row) => {
-      console.log(`新しく作成されたレコード値: ${row.title}`);
-    });
+    const bookPromises = books.map((book) => insertAsyncpromise(db, book.title));
+    await Promise.allSettled(bookPromises);
   } catch (err) {
-    console.error("エラーが発生しました:", err.message);
-  } finally {
-    await closeTable(db);
-    db.close();
+    console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
   }
+  await allPromise(db, "SELECT name FROM books");
+  await runPromise(db, "DROP TABLE books");
+  db.close();
 }
-
 main();
