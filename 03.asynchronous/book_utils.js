@@ -10,19 +10,6 @@ export const insertPromise = (db, title) => {
   return new Promise((resolve, reject) => {
     db.run("INSERT INTO books (title) VALUES (?)", title, function (err) {
       if (err) {
-        console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
-        reject(err);
-      } else {
-        console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-        resolve();
-      }
-    });
-  });
-}
-export const insertAsyncpromise = (db, title) => {
-  return new Promise((resolve, reject) => {
-    db.run("INSERT INTO books (title) VALUES (?)", title, function (err) {
-      if (err) {
         reject(new Error(`データ挿入時にエラーが発生しました: ${err.message}`));
       } else {
         console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
