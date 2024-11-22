@@ -9,14 +9,17 @@ async function main() {
     { title: "ヤドン" },
   ];
 
-  await runPromise(db, "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)");
+  await runPromise(
+    db,
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+  );
   try {
     const bookPromises = books.map((book) => insertPromise(db, book.title));
     await Promise.all(bookPromises);
   } catch (insertError) {
     console.error(insertError.message);
   }
-  try {  
+  try {
     await allPromise(db, "SELECT name FROM books");
   } catch (selectError) {
     console.error(selectError.message);

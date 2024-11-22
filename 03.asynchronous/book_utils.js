@@ -4,7 +4,7 @@ export const runPromise = (db, query) => {
       resolve();
     });
   });
-}
+};
 
 export const insertPromise = (db, title) => {
   return new Promise((resolve, reject) => {
@@ -17,7 +17,7 @@ export const insertPromise = (db, title) => {
       }
     });
   });
-}
+};
 
 export const allPromise = (db, query) => {
   return new Promise((resolve, reject) => {
@@ -32,4 +32,4 @@ export const allPromise = (db, query) => {
       }
     });
   });
-}
+};

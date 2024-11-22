@@ -9,7 +9,10 @@ async function main() {
     { title: "ヤドン" },
   ];
 
-  await runPromise(db, "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)")
+  await runPromise(
+    db,
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+  );
   const bookPromises = books.map((book) => insertPromise(db, book.title));
   await Promise.allSettled(bookPromises);
   await allPromise(db, "SELECT title FROM books");

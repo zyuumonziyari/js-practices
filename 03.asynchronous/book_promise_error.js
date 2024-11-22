@@ -9,19 +9,22 @@ function main() {
     { title: "ヤドン" },
   ];
 
-  runPromise(db, "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)")
+  runPromise(
+    db,
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+  )
     .then(() => {
       const bookPromises = books.map((book) => insertPromise(db, book.title));
-      return Promise.allSettled(bookPromises)
+      return Promise.all(bookPromises);
     })
-    .catch((error) => {
-      console.error(`エラーが発生しました: ${error.message}`);
+    .catch((insertError) => {
+      console.error(insertError.message);
     })
     .then(() => {
       return allPromise(db, "SELECT name FROM books");
     })
-    .catch((error) => {
-      console.error(`エラーが発生しました: ${error.message}`);
+    .catch((selectError) => {
+      console.error(selectError.message);
     })
     .finally(() => {
       runPromise(db, "DROP TABLE books").finally(() => db.close());

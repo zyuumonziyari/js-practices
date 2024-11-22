@@ -9,16 +9,19 @@ function main() {
     { title: "ヤドン" },
   ];
 
-  runPromise(db, "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)")
-  .then(() => {
-    const bookPromises = books.map((book) => insertPromise(db, book.title));
-    return Promise.allSettled(bookPromises)
-  })
-  .then(() => {
-    return allPromise(db, "SELECT title FROM books");
-  })
-  .finally(() => {
-    runPromise(db, "DROP TABLE books").finally(() => db.close());
-  });
+  runPromise(
+    db,
+    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+  )
+    .then(() => {
+      const bookPromises = books.map((book) => insertPromise(db, book.title));
+      return Promise.allSettled(bookPromises);
+    })
+    .then(() => {
+      return allPromise(db, "SELECT title FROM books");
+    })
+    .finally(() => {
+      runPromise(db, "DROP TABLE books").finally(() => db.close());
+    });
 }
 main();
