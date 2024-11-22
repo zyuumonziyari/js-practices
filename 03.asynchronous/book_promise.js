@@ -10,18 +10,15 @@ function main() {
   ];
 
   runPromise(db, "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)")
-    .then(() => {
-        let bookPromise = Promise.resolve();
-      for (let i = 0; i < books.length; i++) {
-        bookPromise = bookPromise.then(() => insertPromise(db, books[i].title));
-      }
-      return bookPromise;
-    })
-    .then(() => {
-      return allPromise(db, "SELECT title FROM books");
-    })
-    .finally(() => {
-      runPromise(db, "DROP TABLE books").finally(() => db.close());
-    });
+  .then(() => {
+    const bookPromises = books.map((book) => insertPromise(db, book.title));
+    return Promise.allSettled(bookPromises)
+  })
+  .then(() => {
+    return allPromise(db, "SELECT title FROM books");
+  })
+  .finally(() => {
+    runPromise(db, "DROP TABLE books").finally(() => db.close());
+  });
 }
 main();
