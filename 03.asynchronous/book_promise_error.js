@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { runPromise, insertPromise, allPromise } from "./book_utils.js";
+import { runPromise, allPromise } from "./book_utils.js";
 
 function main() {
   const db = new sqlite3.Database(":memory:");
@@ -9,13 +9,19 @@ function main() {
     { title: "ヤドン" },
   ];
 
-  runPromise(
+  runPromise(   
     db,
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
   )
-    .then(() => {
-      const bookPromises = books.map((book) => insertPromise(db, book.title));
-      return Promise.all(bookPromises);
+  .then(() => {
+    let bookPromise = Promise.resolve();
+      for (let i = 0; i < books.length; i++) {
+        bookPromise = bookPromise
+        .then(() =>
+          runPromise(db,  "INSERT INTO books (title) VALUES (?)", books[i].title)
+        );
+      }
+      return bookPromise;
     })
     .catch((insertError) => {
       console.error(insertError.message);
