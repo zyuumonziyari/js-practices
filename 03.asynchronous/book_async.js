@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { runPromise, insertPromise, allPromise } from "./book_utils.js";
+import { runPromise, allPromise } from "./book_utils.js";
 
 async function main() {
   const db = new sqlite3.Database(":memory:");
@@ -13,8 +13,9 @@ async function main() {
     db,
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
   );
-  const bookPromises = books.map((book) => insertPromise(db, book.title));
-  await Promise.allSettled(bookPromises);
+  for (const book of books) {
+    await runPromise(db, "INSERT INTO books (title) VALUES (?)", book.title);
+  }
   await allPromise(db, "SELECT title FROM books");
   await runPromise(db, "DROP TABLE books");
   db.close();
