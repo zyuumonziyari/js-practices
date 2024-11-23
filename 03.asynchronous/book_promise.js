@@ -15,13 +15,9 @@ function main() {
   )
     .then(() => {
       let bookPromise = Promise.resolve();
-      for (let i = 0; i < books.length; i++) {
+      for (const book of books) {
         bookPromise = bookPromise.then(() =>
-          runPromise(
-            db,
-            "INSERT INTO books (title) VALUES (?)",
-            books[i].title,
-          ),
+          runPromise(db, "INSERT INTO books (title) VALUES (?)", book.title),
         );
       }
       return bookPromise;
