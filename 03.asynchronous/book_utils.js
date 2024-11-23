@@ -1,18 +1,12 @@
-export const runPromise = (db, query) => {
-  return new Promise((resolve) => {
-    db.run(query, () => {
-      resolve();
-    });
-  });
-};
-
-export const insertPromise = (db, title) => {
+export const runPromise = (db, query, title) => {
   return new Promise((resolve, reject) => {
-    db.run("INSERT INTO books (title) VALUES (?)", title, function (err) {
+    db.run(query, title, function(err) {
       if (err) {
         reject(new Error(`データ挿入時にエラーが発生しました: ${err.message}`));
       } else {
+        if (title)  {
         console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
+        }
         resolve();
       }
     });
