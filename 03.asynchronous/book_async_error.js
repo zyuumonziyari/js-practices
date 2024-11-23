@@ -14,12 +14,12 @@ async function main() {
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
   );
   try {
-      for (const book of books) {
+    for (const book of books) {
       await runPromise(db, "INSERT INTO books (title) VALUES (?)", book.title);
     }
-    } catch (insertError) {
-      console.error(insertError.message);
-    }
+  } catch (insertError) {
+    console.error(insertError.message);
+  }
   try {
     await allPromise(db, "SELECT name FROM books");
   } catch (selectError) {
