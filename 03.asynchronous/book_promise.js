@@ -29,8 +29,9 @@ function main() {
     .then(() => {
       return allPromise(db, "SELECT title FROM books");
     })
-    .finally(() => {
-      runPromise(db, "DROP TABLE books").finally(() => db.close());
-    });
+    .then(() => {
+      runPromise(db, "DROP TABLE books");
+    })
+    .finally(() => db.close());
 }
 main();

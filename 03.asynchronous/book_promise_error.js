@@ -35,8 +35,9 @@ function main() {
     .catch((selectError) => {
       console.error(selectError.message);
     })
-    .finally(() => {
-      runPromise(db, "DROP TABLE books").finally(() => db.close());
-    });
+    .then(() => {
+      runPromise(db, "DROP TABLE books");
+    })
+    .finally(() => db.close());
 }
 main();
