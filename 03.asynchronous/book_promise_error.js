@@ -36,4 +36,5 @@ function main() {
     })
     .finally(() => db.close());
 }
+
 main();

@@ -28,4 +28,5 @@ async function main() {
   await runPromise(db, "DROP TABLE books");
   db.close();
 }
+
 main();
