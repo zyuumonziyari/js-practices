@@ -27,3 +27,9 @@ export const allPromise = (db, query) => {
     });
   });
 };
+
+export const closePromise = (db) => {
+  return new Promise((resolve) => {
+    db.close(() => resolve());
+  });
+};
