@@ -16,16 +16,16 @@ function main() {
     .then(() =>
       runPromise(db, "INSERT INTO books (title) VALUES (?)", books[0].title),
     )
-    .then((lastID) => {
-      console.log(`新しく挿入されたレコードのID: ${lastID}`);
+    .then((bookID) => {
+      console.log(`新しく挿入されたレコードのID: ${bookID}`);
       return runPromise(
         db,
         "INSERT INTO books (title) VALUES (?)",
         books[1].title,
       );
     })
-    .then((lastID) => {
-      console.log(`新しく挿入されたレコードのID: ${lastID}`);
+    .then((bookID) => {
+      console.log(`新しく挿入されたレコードのID: ${bookID}`);
       return runPromise(
         db,
         "INSERT INTO books (title) VALUES (?)",
