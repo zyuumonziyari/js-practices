@@ -32,8 +32,9 @@ async function main() {
     );
   } catch (err) {
     console.error(`データ取得時にエラーが発生しました: ${err.message}`);
-  } finally {
+  } try {
     await runPromise(db, "DROP TABLE books");
+  } finally {
     await closePromise(db);
   }
 }
