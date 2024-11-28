@@ -13,20 +13,29 @@ async function main() {
     db,
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
   );
-  try {
-    for (const book of books) {
-      await runPromise(db, "INSERT INTO books (title) VALUES (?)", book.title);
+  for (const book of books) {
+    try {
+      const lastID = await runPromise(
+        db,
+        "INSERT INTO books (title) VALUES (?)",
+        book.title,
+      );
+      console.log(`新しく挿入されたレコードのID: ${lastID}`);
+    } catch (err) {
+      console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
     }
-  } catch (insertError) {
-    console.error(insertError.message);
   }
   try {
-    await allPromise(db, "SELECT name FROM books");
-  } catch (selectError) {
-    console.error(selectError.message);
+    const rows = await allPromise(db, "SELECT name FROM books");
+    rows.forEach((row) =>
+      console.log(`新しく作成されたレコード値: ${row.title}`),
+    );
+  } catch (err) {
+    console.error(`データ取得時にエラーが発生しました: ${err.message}`);
+  } finally {
+    await runPromise(db, "DROP TABLE books");
+    await closePromise(db);
   }
-  await runPromise(db, "DROP TABLE books");
-  closePromise(db);
 }
 
 main();

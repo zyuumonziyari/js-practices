@@ -9,16 +9,27 @@ async function main() {
     { title: "ヤドン" },
   ];
 
-  await runPromise(
-    db,
-    "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-  );
-  for (const book of books) {
-    await runPromise(db, "INSERT INTO books (title) VALUES (?)", book.title);
+  try {
+    await runPromise(
+      db,
+      "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+    );
+    for (const book of books) {
+      const lastID = await runPromise(
+        db,
+        "INSERT INTO books (title) VALUES (?)",
+        book.title,
+      );
+      console.log(`新しく挿入されたレコードのID: ${lastID}`);
+    }
+    const rows = await allPromise(db, "SELECT title FROM books");
+    rows.forEach((row) =>
+      console.log(`新しく作成されたレコード値: ${row.title}`),
+    );
+    await runPromise(db, "DROP TABLE books");
+  } finally {
+    await closePromise(db);
   }
-  await allPromise(db, "SELECT title FROM books");
-  await runPromise(db, "DROP TABLE books");
-  closePromise(db);
 }
 
 main();
