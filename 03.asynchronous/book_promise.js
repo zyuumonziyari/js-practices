@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { runPromise, allPromise } from "./book_utils.js";
+import { runPromise, allPromise, closePromise } from "./book_utils.js";
 
 function main() {
   const db = new sqlite3.Database(":memory:");
@@ -18,7 +18,7 @@ function main() {
     .then(() => runPromise(db, "INSERT INTO books (title) VALUES (?)", books[2].title))
     .then(() => allPromise(db, "SELECT title FROM books"))
     .then(() => runPromise(db, "DROP TABLE books"))
-    .finally(() => db.close());
+    .finally(() => closePromise(db));
 }
 
 main();
