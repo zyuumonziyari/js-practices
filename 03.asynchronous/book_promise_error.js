@@ -32,6 +32,7 @@ function main() {
         books[2].title,
       );
     })
+    .then((bookID) => console.log(`新しく挿入されたレコードのID: ${bookID}`))
     .catch((err) =>
       console.error(`データ挿入時にエラーが発生しました: ${err.message}`),
     )
