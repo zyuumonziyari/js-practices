@@ -13,17 +13,17 @@ async function main() {
     db,
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
   );
-  for (const book of books) {
-    try {
+  try {
+    for (const book of books) {
       const result = await runPromise(
         db,
         "INSERT INTO books (title) VALUES (?)",
         book.title,
       );
       console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
-    } catch (err) {
-      console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
     }
+  } catch (err) {
+    console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
   }
   try {
     const rows = await allPromise(db, "SELECT name FROM books");
