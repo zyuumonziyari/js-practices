@@ -1,13 +1,10 @@
-export const runPromise = (db, query, bookTitle) => {
+export const runPromise = (db, query, ...parameters) => {
   return new Promise((resolve, reject) => {
-    db.run(query, bookTitle, function (err) {
+    db.run(query, ...parameters, function (err) {
       if (err) {
         reject(err);
       } else {
-        if (bookTitle) {
-          resolve(this.lastID);
-        }
-        resolve();
+        resolve({bookId: this.lastID, choices: this.choices});
       }
     });
   });
@@ -26,7 +23,13 @@ export const allPromise = (db, query) => {
 };
 
 export const closePromise = (db) => {
-  return new Promise((resolve) => {
-    db.close(() => resolve());
+  return new Promise((resolve, reject) => {
+    db.close((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
   });
 };

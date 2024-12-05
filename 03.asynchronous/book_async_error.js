@@ -15,12 +15,12 @@ async function main() {
   );
   for (const book of books) {
     try {
-      const bookID = await runPromise(
+      const result = await runPromise(
         db,
         "INSERT INTO books (title) VALUES (?)",
         book.title,
       );
-      console.log(`新しく挿入されたレコードのID: ${bookID}`);
+      console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
     } catch (err) {
       console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
     }

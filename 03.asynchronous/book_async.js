@@ -15,12 +15,12 @@ async function main() {
       "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
     );
     for (const book of books) {
-      const bookID = await runPromise(
+      const result = await runPromise(
         db,
         "INSERT INTO books (title) VALUES (?)",
         book.title,
       );
-      console.log(`新しく挿入されたレコードのID: ${bookID}`);
+      console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
     }
     const rows = await allPromise(db, "SELECT title FROM books");
     rows.forEach((row) =>
