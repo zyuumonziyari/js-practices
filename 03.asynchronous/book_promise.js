@@ -40,8 +40,8 @@ function main() {
       rows.forEach((row) =>
         console.log(`新しく作成されたレコード値: ${row.title}`),
       );
+      runPromise(db, "DROP TABLE books")
     })
-    .then(() => runPromise(db, "DROP TABLE books"))
     .finally(() => closePromise(db));
 }
 
