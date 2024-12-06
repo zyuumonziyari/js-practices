@@ -37,9 +37,9 @@ function main() {
       return allPromise(db, "SELECT title FROM books");
     })
     .then((rows) => {
-      rows.forEach((row) =>
-        console.log(`新しく作成されたレコード値: ${row.title}`),
-      );
+      rows.forEach((row) => {
+        console.log(`新しく作成されたレコード値: ${row.title}`);
+      });
       runPromise(db, "DROP TABLE books")
     })
     .finally(() => closePromise(db));

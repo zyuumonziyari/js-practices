@@ -27,12 +27,12 @@ async function main() {
   }
   try {
     const rows = await allPromise(db, "SELECT name FROM books");
-    rows.forEach((row) =>
-      console.log(`新しく作成されたレコード値: ${row.title}`),
-    );
-    await runPromise(db, "DROP TABLE books");
+    rows.forEach((row) => {
+      console.log(`新しく作成されたレコード値: ${row.title}`)
+    });
   } catch (err) {
     console.error(`データ取得時にエラーが発生しました: ${err.message}`);
+    await runPromise(db, "DROP TABLE books");
   } finally {
     await closePromise(db);
   }

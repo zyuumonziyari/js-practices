@@ -23,9 +23,9 @@ async function main() {
       console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
     }
     const rows = await allPromise(db, "SELECT title FROM books");
-    rows.forEach((row) =>
-      console.log(`新しく作成されたレコード値: ${row.title}`),
-    );
+    rows.forEach((row) => {
+      console.log(`新しく作成されたレコード値: ${row.title}`)
+    });
     await runPromise(db, "DROP TABLE books");
   } finally {
     await closePromise(db);
