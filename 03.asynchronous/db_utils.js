@@ -4,7 +4,7 @@ export const runPromise = (db, query, ...parameters) => {
       if (err) {
         reject(err);
       } else {
-        resolve({bookId: this.lastID, choices: this.choices});
+        resolve({bookId: this.lastID, changes: this.changes});
       }
     });
   });
@@ -12,7 +12,7 @@ export const runPromise = (db, query, ...parameters) => {
 
 export const allPromise = (db, query) => {
   return new Promise((resolve, reject) => {
-    db.all(query, (err, rows) => {
+    db.all(query, (err, ...rows) => {
       if (err) {
         reject(err);
       } else {
