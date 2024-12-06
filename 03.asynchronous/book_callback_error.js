@@ -32,35 +32,20 @@ function main() {
               } else {
                 console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
               }
-
-              db.run(
-                "INSERT INTO books (title) VALUES (?)",
-                books[2].title,
-                function (err) {
-                  if (err) {
-                    console.error(
-                      `データ挿入時にエラーが発生しました: ${err.message}`,
-                    );
-                  } else {
-                    console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
-                  }
-
-                  db.all("SELECT name FROM books", (err, rows) => {
-                    if (err) {
-                      console.error(
-                        `データ取得時にエラーが発生しました: ${err.message}`,
-                      );
-                    } else {
-                      rows.forEach((row) => {
-                        console.log(`新しく作成されたレコード値: ${row.title}`);
-                      });
-                    }
-                    db.run("DROP TABLE books", () => {
-                      db.close();
-                    });
+              db.all("SELECT name FROM books", (err, rows) => {
+                if (err) {
+                  console.error(
+                    `データ取得時にエラーが発生しました: ${err.message}`,
+                  );
+                } else {
+                  rows.forEach((row) => {
+                    console.log(`新しく作成されたレコード値: ${row.title}`);
                   });
-                },
-              );
+                }
+                db.run("DROP TABLE books", () => {
+                  db.close();
+                });
+              });
             },
           );
         },
