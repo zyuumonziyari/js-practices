@@ -4,15 +4,15 @@ export const runPromise = (db, query, ...parameters) => {
       if (err) {
         reject(err);
       } else {
-        resolve({bookId: this.lastID, changes: this.changes});
+        resolve({ bookId: this.lastID, changes: this.changes });
       }
     });
   });
 };
 
-export const allPromise = (db, query) => {
+export const allPromise = (db, query, ...parameters) => {
   return new Promise((resolve, reject) => {
-    db.all(query, (err, ...rows) => {
+    db.all(query, ...parameters, (err, rows) => {
       if (err) {
         reject(err);
       } else {

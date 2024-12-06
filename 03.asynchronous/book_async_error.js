@@ -28,7 +28,7 @@ async function main() {
   try {
     const rows = await allPromise(db, "SELECT name FROM books");
     rows.forEach((row) => {
-      console.log(`新しく作成されたレコード値: ${row.title}`)
+      console.log(`新しく作成されたレコード値: ${row.title}`);
     });
   } catch (err) {
     console.error(`データ取得時にエラーが発生しました: ${err.message}`);
