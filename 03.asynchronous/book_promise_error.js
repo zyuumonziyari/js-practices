@@ -36,7 +36,7 @@ function main() {
       console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
     })
     .catch((err) => {
-      console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+      console.error(`レコード挿入時にエラーが発生しました: ${err.message}`);
     })
     .then(() => allPromise(db, "SELECT name FROM books"))
     .then((rows) => {
@@ -45,7 +45,7 @@ function main() {
       });
     })
     .catch((err) => {
-      console.error(`データ取得時にエラーが発生しました: ${err.message}`);
+      console.error(`レコード取得時にエラーが発生しました: ${err.message}`);
     })
     .then(() => runPromise(db, "DROP TABLE books"))
     .finally(() => closePromise(db));

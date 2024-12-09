@@ -16,7 +16,9 @@ function main() {
         books[0].title,
         function (err) {
           if (err) {
-            console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+            console.error(
+              `レコード挿入時にエラーが発生しました: ${err.message}`,
+            );
           } else {
             console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
           }
@@ -27,7 +29,7 @@ function main() {
             function (err) {
               if (err) {
                 console.error(
-                  `データ挿入時にエラーが発生しました: ${err.message}`,
+                  `レコード挿入時にエラーが発生しました: ${err.message}`,
                 );
               } else {
                 console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
@@ -35,7 +37,7 @@ function main() {
               db.all("SELECT name FROM books", (err, rows) => {
                 if (err) {
                   console.error(
-                    `データ取得時にエラーが発生しました: ${err.message}`,
+                    `レコード取得時にエラーが発生しました: ${err.message}`,
                   );
                 } else {
                   rows.forEach((row) => {

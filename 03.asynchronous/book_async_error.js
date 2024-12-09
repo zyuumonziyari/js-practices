@@ -24,9 +24,9 @@ async function main() {
         console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
       }
     } catch (err) {
-      throw new Error(`データ挿入時にエラーが発生しました: ${err.message}`);
+      throw new Error(`レコード挿入時にエラーが発生しました: ${err.message}`);
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err.message);
   }
   try {
@@ -36,9 +36,9 @@ async function main() {
         console.log(`新しく作成されたレコード値: ${row.title}`);
       });
     } catch (err) {
-      throw new Error(`データ取得時にエラーが発生しました: ${err.message}`);
+      throw new Error(`レコード取得時にエラーが発生しました: ${err.message}`);
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err.message);
   } finally {
     await runPromise(db, "DROP TABLE books");
