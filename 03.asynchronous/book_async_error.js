@@ -24,16 +24,22 @@ async function main() {
         console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
       }
     } catch (err) {
-      console.error(`データ挿入時にエラーが発生しました: ${err.message}`);
+      throw new Error(`データ挿入時にエラーが発生しました: ${err.message}`);
     }
+  } catch(err) {
+    console.error(err.message);
+  }
+  try {
     try {
       const rows = await allPromise(db, "SELECT name FROM books");
       rows.forEach((row) => {
         console.log(`新しく作成されたレコード値: ${row.title}`);
       });
     } catch (err) {
-      console.error(`データ取得時にエラーが発生しました: ${err.message}`);
+      throw new Error(`データ取得時にエラーが発生しました: ${err.message}`);
     }
+  } catch(err) {
+    console.error(err.message);
   } finally {
     await runPromise(db, "DROP TABLE books");
     await closePromise(db);
