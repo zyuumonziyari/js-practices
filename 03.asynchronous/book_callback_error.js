@@ -22,7 +22,6 @@ function main() {
           } else {
             console.log(`新しく挿入されたレコードのID: ${this.lastID}`);
           }
-
           db.run(
             "INSERT INTO books (title) VALUES (?)",
             books[1].title,
