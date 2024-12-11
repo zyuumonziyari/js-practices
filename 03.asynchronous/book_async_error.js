@@ -24,7 +24,9 @@ async function main() {
         console.log(`新しく挿入されたレコードのID: ${result.lastID}`);
       }
     } catch (err) {
-      console.error(`レコード挿入時にエラーが発生しました: ${err.message}`);
+      if (err.message.includes("UNIQUE constraint failed")) {
+        console.error(`レコード挿入時にエラーが発生しました: ${err.message}`);
+      }
     }
     try {
       const rows = await allPromise(db, "SELECT name FROM books");
@@ -32,11 +34,11 @@ async function main() {
         console.log(`新しく作成されたレコード値: ${row.title}`);
       });
     } catch (err) {
-      console.error(`レコード取得時にエラーが発生しました: ${err.message}`);
+      if (err.message.includes("no such column: name")) {
+        console.error(`レコード取得時にエラーが発生しました: ${err.message}`);
+      }
     }
     await runPromise(db, "DROP TABLE books");
-  } catch (err) {
-    console.error(err.message);
   } finally {
     await closePromise(db);
   }
