@@ -21,27 +21,23 @@ async function main() {
           "INSERT INTO books (title) VALUES (?)",
           book.title,
         );
-        console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
+        console.log(`新しく挿入されたレコードのID: ${result.lastID}`);
       }
     } catch (err) {
-      throw new Error(`レコード挿入時にエラーが発生しました: ${err.message}`);
+      console.error(`レコード挿入時にエラーが発生しました: ${err.message}`);
     }
-  } catch (err) {
-    console.error(err.message);
-  }
-  try {
     try {
       const rows = await allPromise(db, "SELECT name FROM books");
       rows.forEach((row) => {
         console.log(`新しく作成されたレコード値: ${row.title}`);
       });
     } catch (err) {
-      throw new Error(`レコード取得時にエラーが発生しました: ${err.message}`);
+      console.error(`レコード取得時にエラーが発生しました: ${err.message}`);
     }
+    await runPromise(db, "DROP TABLE books");
   } catch (err) {
     console.error(err.message);
   } finally {
-    await runPromise(db, "DROP TABLE books");
     await closePromise(db);
   }
 }
