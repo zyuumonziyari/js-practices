@@ -17,7 +17,7 @@ function main() {
       runPromise(db, "INSERT INTO books (title) VALUES (?)", books[0].title),
     )
     .then((result) => {
-      console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
+      console.log(`新しく挿入されたレコードのID: ${result.lastID}`);
       return runPromise(
         db,
         "INSERT INTO books (title) VALUES (?)",
@@ -25,15 +25,7 @@ function main() {
       );
     })
     .then((result) => {
-      console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
-      return runPromise(
-        db,
-        "INSERT INTO books (title) VALUES (?)",
-        books[2].title,
-      );
-    })
-    .then((result) => {
-      console.log(`新しく挿入されたレコードのID: ${result.bookId}`);
+      console.log(`新しく挿入されたレコードのID: ${result.lastID}`);
     })
     .catch((err) => {
       console.error(`レコード挿入時にエラーが発生しました: ${err.message}`);

@@ -4,7 +4,7 @@ export const runPromise = (db, query, ...parameters) => {
       if (err) {
         reject(err);
       } else {
-        resolve({ bookId: this.lastID, changes: this.changes });
+        resolve({ lastID: this.lastID, changes: this.changes });
       }
     });
   });
