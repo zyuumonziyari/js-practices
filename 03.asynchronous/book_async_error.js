@@ -26,6 +26,10 @@ async function main() {
     } catch (err) {
       if (err.message.includes("UNIQUE constraint failed")) {
         console.error(`レコード挿入時にエラーが発生しました: ${err.message}`);
+      } else {
+        throw new Error(
+          `レコード挿入中に予期しないエラーが発生しました: ${err.message}`,
+        );
       }
     }
     try {
@@ -36,9 +40,15 @@ async function main() {
     } catch (err) {
       if (err.message.includes("no such column: name")) {
         console.error(`レコード取得時にエラーが発生しました: ${err.message}`);
+      } else {
+        throw new Error(
+          `レコード取得中に予期しないエラーが発生しました: ${err.message}`,
+        );
       }
     }
     await runPromise(db, "DROP TABLE books");
+  } catch (err) {
+    console.error(err.message);
   } finally {
     await closePromise(db);
   }
