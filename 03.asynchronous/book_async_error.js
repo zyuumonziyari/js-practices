@@ -28,7 +28,7 @@ async function main() {
         console.error(`レコード挿入時にエラーが発生しました: ${err.message}`);
       } else {
         throw new Error(
-          `レコード挿入中に予期しないエラーが発生しました: ${err.message}`,
+          `レコード挿入時に予期しないエラーが発生しました: ${err.message}`,
         );
       }
     }
@@ -42,7 +42,7 @@ async function main() {
         console.error(`レコード取得時にエラーが発生しました: ${err.message}`);
       } else {
         throw new Error(
-          `レコード取得中に予期しないエラーが発生しました: ${err.message}`,
+          `レコード取得時に予期しないエラーが発生しました: ${err.message}`,
         );
       }
     }
